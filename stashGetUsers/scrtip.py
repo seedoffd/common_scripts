@@ -15,3 +15,9 @@ else:
 
 with open('groups.json', 'w') as file:
     json.dump(stash.admin.groups.list(), file, indent=2)
+
+# with open('restaurantpollingworker.json', 'w') as file:
+#     json.dump(stash.admin.users.list(), file, indent=2)
+
+with open('projects.json', 'w') as file:
+    json.dump(stash.projects.list(), file, indent=2)
