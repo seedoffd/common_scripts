@@ -1,0 +1,221 @@
+#!/bin/bash
+echo $0
+if [ "$0" = "$BASH_SOURCE" ]
+then
+    echo "$0: Please source this file."
+    echo "e.g. source ./setenv configurations/data-rnd-us-vet1-v1"
+    return 1
+fi
+
+if [ -z "$1" ]
+then
+    echo "setenv: You must provide the name of the configuration file."
+    echo "e.g. source ./setenv configurations/data-rnd-us-vet1-v1"
+    return 1
+fi
+
+# Get directory we are running from
+DIR=$(pwd)
+
+DATAFILE="$DIR/$1"
+
+if [ ! -d "$DIR/configurations" ]; then
+    echo "setenv: Must be run from the root directory of the terraform project."
+    return 1
+fi
+
+if [ ! -f "$DATAFILE" ]; then
+    echo "setenv: Configuration file not found: $DATAFILE"
+    return 1
+fi
+
+# Get env from DATAFILE
+ENVIRONMENT=$(sed -nr 's/^environment\s*=\s*"([^"]*)".*$/\1/p' "$DATAFILE")
+S3BUCKET=$(sed -nr 's/^s3_bucket\s*=\s*"([^"]*)".*$/\1/p' "$DATAFILE")
+S3BUCKETPROJ=$(sed -nr 's/^s3_folder_project\s*=\s*"([^"]*)".*$/\1/p' "$DATAFILE")
+S3BUCKETREGION=$(sed -nr 's/^s3_folder_region\s*=\s*"([^"]*)".*$/\1/p' "$DATAFILE")
+S3BUCKETTYPE=$(sed -nr 's/^s3_folder_type\s*=\s*"([^"]*)".*$/\1/p' "$DATAFILE")
+S3TFSTATEFILE=$(sed -nr 's/^s3_tfstate_file\s*=\s*"([^"]*)".*$/\1/p' "$DATAFILE")
+BASE_DOMAIN=$(sed -nr 's/^base_domain\s*=\s*"([^"]*)".*$/\1/p' "$DATAFILE")
+VET_CLUSTER=$(sed -nr 's/^VET_CLUSTER\s*=\s*"([^"]*)".*$/\1/p' "$DATAFILE")
+STATE_LOCK_TABLE=$(sed -nr 's/^state_lock_table\s*=\s*"([^"]*)".*$/\1/p' "$DATAFILE")
+
+
+if [ -z "$ENVIRONMENT" ]
+then
+    echo "setenv: 'environment' variable not set in configuration file."
+    return 1
+fi
+if [ -z "$S3BUCKET" ]
+then
+    echo "setenv: 's3_bucket' variable not set in configuration file."
+    return 1
+fi
+if [ -z "$S3BUCKETPROJ" ]
+then
+    S3BUCKETPROJ=$(sed -nr 's/^\s*project_name\s*=\s*"([^"]*)".*$/\1/p' "$DATAFILE")
+    if [ -z "$S3BUCKETPROJ" ]
+    then
+        echo "setenv: 's3_folder_project' variable not set in configuration file."
+        return 1
+    fi
+fi
+if [ -z "$S3BUCKETREGION" ]
+then
+    echo "setenv: 's3_folder_region' variable not set in configuration file."
+    return 1
+fi
+if [ -z "$S3BUCKETTYPE" ]
+then
+    echo "setenv: 's3_folder_type' variable not set in configuration file."
+    return 1
+fi
+if [ -z "$S3TFSTATEFILE" ]
+then
+    echo "setenv: 's3_tfstate_file' variable not set in configuration file."
+    echo "e.g. s3_tfstate_file=\"infrastructure.tfstate\""
+    return 1
+fi
+
+if [ -z "$VET_CLUSTER" ]
+then
+    export VET_CLUSTER=$ENVIRONMENT
+fi
+
+if [ -z "$STATE_LOCK_TABLE" ]
+then
+cat << EOF > "$DIR/backend.tf"
+terraform {
+  backend "s3" {
+    bucket = "${S3BUCKET}"
+    key    = "${S3BUCKETPROJ}/${S3BUCKETREGION}/${S3BUCKETTYPE}/${ENVIRONMENT}/${S3TFSTATEFILE}"
+    region = "${S3BUCKETREGION}"
+  }
+}
+EOF
+else
+cat << EOF > "$DIR/backend.tf"
+terraform {
+  backend "s3" {
+    bucket = "${S3BUCKET}"
+    key    = "${S3BUCKETPROJ}/${S3BUCKETREGION}/${S3BUCKETTYPE}/${ENVIRONMENT}/${S3TFSTATEFILE}"
+    dynamodb_table = "${STATE_LOCK_TABLE}-tfstate-lock"
+    region = "${S3BUCKETREGION}"
+  }
+}
+EOF
+fi
+
+# Verify if user has valid AWS credentials in current session
+if CALLER_IDENTITY=$(aws sts get-caller-identity 2>&1); then
+    echo "Using AWS Identity: ${CALLER_IDENTITY}"
+else
+    echo "setenv: Please run 'get-temporary-aws-credentials.sh' first"
+    echo "get-temporary-aws-credentials.sh script is found in https://coderepository.mcd.com/projects/VET/repos/scripts"
+    return 1
+fi
+
+if [[ "$(uname -s)" != "Linux" ]]; then
+    echo "setenv: WARNING: If not run from a Linux system you'll have to install and properly configure your own terraform, kubect, kops and helm."
+
+# If all of the following variables are set we are inside the vet-build-tools image, no need to download tools
+elif [[ -z $HELM_VERSION || -z $TERRAFORM_VERSION || -z $KUBECTL_VERSION || -z $KOPS_VERSION ]]; then
+    #get the tools
+    mkdir -p "$DIR/bin"
+    cd "$DIR/bin"
+    # Download specific version of the tools
+    declare -A tools
+    tools=( [terraform]="0.11.7" [kubectl]="1.11.3" [kops]="1.11.1" [aws-iam-authenticator]="0.4.0" [helm]="2.11.0" )
+
+    for i in "${!tools[@]}"
+    do
+        url="http://artifactrepository.mcd.com/artifactory/vet-tools/linux/$i/$i-${tools[$i]}"
+        # Curl downloads empty file is file not found. Ref: https://github.com/curl/curl/issues/270
+        if curl --output /dev/null --silent --head --fail "${url}"; then
+            echo "URL exists: ${url}"
+            curl -z ${i} -o ${i} -L ${url}
+            chmod +x ${i}
+        else
+            echo "URL does not exist: ${url}"
+            return 1
+        fi
+    done
+
+    cd "$DIR"
+    [[ ":$PATH:" != *":${DIR}/bin:"* ]] && PATH="${DIR}/bin:${PATH}"
+    export PATH
+fi
+
+export DATAFILE
+rm -rf "$DIR/.terraform"
+
+cd "$DIR"
+
+echo "setenv: Initializing terraform"
+terraform init > /dev/null
+
+echo "setenv: Set correct kubecontext"
+
+export KOPS_STATE_STORE=s3://${S3BUCKET}/vet/${S3BUCKETREGION}/sharedtools/${VET_CLUSTER}
+# If BASE_DOMAIN variable doesn't exist in configuration file then pull it from infrastructure.tfstate file
+if [ -z "$BASE_DOMAIN" ]; then
+    export BASE_DOMAIN=$(aws s3 cp ${KOPS_STATE_STORE}/infrastructure.tfstate - |grep '"base_domain"' -A 4 |sed -re 's/^[^:]*value": "([^"]*)"/\1/;t;d')
+fi
+export CLUSTER_DOMAIN="${VET_CLUSTER}.${BASE_DOMAIN}"
+
+# Need to run export kubecfg to make sure context is available, this also sets kubectl context to whatever is exported
+# Resetting kubectl context back to ORIGINAL_CONTEXT to minimize script side effects for shared DAC users
+#ORIGINAL_CONTEXT=$(kubectl config current-context 2>/dev/null || true)
+
+# Unset kubeconfig
+unset KUBECONFIG
+
+# Setup kubectl context.
+namespaceS3Path=$KOPS_STATE_STORE/kube_namespaces.tfstate
+if aws s3 ls $namespaceS3Path > /dev/null; then
+    echo "Found $CLUSTER_DOMAIN in Namespace state. Assuming kops cluster with aws-iam-authenticator"
+    namespaceTempDir=$(mktemp -d)
+    namespaceStatePath=$namespaceTempDir/namespace.tfstate
+    kubeConfigPath=$namespaceTempDir/kubeconfig
+    aws s3 cp $namespaceS3Path $namespaceStatePath;
+    # What is JQ doing? Statefile has multiple modules, we want an output value from the root module and not one of the other ones.
+    # The path list for the root module contains just "root". Others have "root" and "<module name>"
+    cat $namespaceStatePath | jq '.modules[]|select((.path|length == 1) and .path[0] == "root")|.outputs.kubeconfig.value' -r > $kubeConfigPath
+    if grep "null" $kubeConfigPath > /dev/null; then
+        echo "INFO: AWS-IAM-AUTHENTICATOR is not deployed to $CLUSTER_DOMAIN"
+        echo "INFO: Trying to use kubecfg from kops"
+        if kops export kubecfg "${CLUSTER_DOMAIN}"; then
+            echo "Assuming kops cluster with Kops keys (Admin)"
+            kubectl config use-context "${CLUSTER_DOMAIN}"
+            alias kubectl='kubectl --context="$CLUSTER_DOMAIN"'
+            alias helm='helm --kube-context="$CLUSTER_DOMAIN"'
+        else
+            echo "No kubectl configuration file has been found for $CLUSTER_DOMAIN cluster"
+            return 1
+        fi
+    else
+        export KUBECONFIG=$kubeConfigPath
+        export TF_VAR_kubeconfig=$kubeConfigPath
+    fi
+    if ! kubectl get namespaces > /dev/null; then
+        echo "WARNING: Unable to access cluster, might need to assume correct AWS Role"
+    fi
+elif kops export kubecfg "${CLUSTER_DOMAIN}" > /dev/null 2>&1; then
+    echo "Found $CLUSTER_DOMAIN in kops state. Assuming kops cluster with Kops keys (Admin)"
+    kubectl config use-context "${CLUSTER_DOMAIN}"
+    alias kubectl='kubectl --context="$CLUSTER_DOMAIN"'
+    alias helm='helm --kube-context="$CLUSTER_DOMAIN"'
+elif [ -f $HOME/.kube/$CLUSTER_DOMAIN ]; then
+    echo "Found $HOME/.kube/$CLUSTER_DOMAIN. Assuming eks cluster"
+    export KUBECONFIG=$HOME/.kube/$CLUSTER_DOMAIN
+    # Remove aliases and unset env variables that are only required for kops
+    unalias kubectl helm
+    unset KOPS_STATE_STORE BASE_DOMAIN CLUSTER_DOMAIN
+else
+    echo -en "\nWARNING: No kubectl configuration file has been found for $CLUSTER_DOMAIN cluster.\nINFO: This is to be expected if you are creating new k8s cluster.\n"
+    return 1
+fi
+
+if [ -e .bashrc ]
+  then source .bashrc
+fi

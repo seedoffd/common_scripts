@@ -1,0 +1,594 @@
+[
+  {
+    "name": "accounts-transformation-rw",
+    "deletable": true
+  },
+  {
+    "name": "adobe-assets",
+    "deletable": true
+  },
+  {
+    "name": "adobe-readonly",
+    "deletable": true
+  },
+  {
+    "name": "adobe-ReadWrite",
+    "deletable": true
+  },
+  {
+    "name": "ami",
+    "deletable": true
+  },
+  {
+    "name": "ami-admin",
+    "deletable": true
+  },
+  {
+    "name": "ami-rdisoftware",
+    "deletable": true
+  },
+  {
+    "name": "api-automation-readwrite",
+    "deletable": true
+  },
+  {
+    "name": "api_automation",
+    "deletable": true
+  },
+  {
+    "name": "arch",
+    "deletable": true
+  },
+  {
+    "name": "arch-readonly",
+    "deletable": true
+  },
+  {
+    "name": "arch-readwrite",
+    "deletable": true
+  },
+  {
+    "name": "Asset-ReadOnly",
+    "deletable": true
+  },
+  {
+    "name": "Asset-ReadWrite",
+    "deletable": true
+  },
+  {
+    "name": "aumdap-admin",
+    "deletable": true
+  },
+  {
+    "name": "aumdap-readonly",
+    "deletable": true
+  },
+  {
+    "name": "aumdap-readwrite",
+    "deletable": true
+  },
+  {
+    "name": "burgey-rw",
+    "deletable": true
+  },
+  {
+    "name": "burgey2-rw",
+    "deletable": true
+  },
+  {
+    "name": "ccp",
+    "deletable": true
+  },
+  {
+    "name": "ccs-shared-libraries",
+    "deletable": true
+  },
+  {
+    "name": "CDP-DataStore",
+    "deletable": true
+  },
+  {
+    "name": "CDP-Java",
+    "deletable": true
+  },
+  {
+    "name": "CDP-Talend",
+    "deletable": true
+  },
+  {
+    "name": "CDP-Test",
+    "deletable": true
+  },
+  {
+    "name": "CDP\u2013CICD",
+    "deletable": true
+  },
+  {
+    "name": "cds",
+    "deletable": true
+  },
+  {
+    "name": "chef-provisioning",
+    "deletable": true
+  },
+  {
+    "name": "cim-readwrite",
+    "deletable": true
+  },
+  {
+    "name": "cognetik-corp",
+    "deletable": true
+  },
+  {
+    "name": "config-read",
+    "deletable": true
+  },
+  {
+    "name": "config-readwrite",
+    "deletable": true
+  },
+  {
+    "name": "core",
+    "deletable": true
+  },
+  {
+    "name": "dashboard",
+    "deletable": true
+  },
+  {
+    "name": "data-migration",
+    "deletable": true
+  },
+  {
+    "name": "DataOps",
+    "deletable": true
+  },
+  {
+    "name": "DataOps_Admin",
+    "deletable": true
+  },
+  {
+    "name": "dcs",
+    "deletable": true
+  },
+  {
+    "name": "dep-gma-dev",
+    "deletable": true
+  },
+  {
+    "name": "DEP-GWS",
+    "deletable": true
+  },
+  {
+    "name": "dep-sso",
+    "deletable": true
+  },
+  {
+    "name": "DEP_Admin",
+    "deletable": true
+  },
+  {
+    "name": "dep_aem_cap_L4",
+    "deletable": true
+  },
+  {
+    "name": "dep_dev_aem",
+    "deletable": true
+  },
+  {
+    "name": "dep_dev_aem_leads",
+    "deletable": true
+  },
+  {
+    "name": "dep_dev_java",
+    "deletable": true
+  },
+  {
+    "name": "dep_dev_java_develop",
+    "deletable": true
+  },
+  {
+    "name": "dep_dev_java_leads",
+    "deletable": true
+  },
+  {
+    "name": "develop-drop2",
+    "deletable": true
+  },
+  {
+    "name": "devops-readwrite",
+    "deletable": true
+  },
+  {
+    "name": "dna-read-write",
+    "deletable": true
+  },
+  {
+    "name": "EAS",
+    "deletable": true
+  },
+  {
+    "name": "ecp_tools",
+    "deletable": true
+  },
+  {
+    "name": "ecpint-admin",
+    "deletable": true
+  },
+  {
+    "name": "ecpint-readonly",
+    "deletable": true
+  },
+  {
+    "name": "ecpint-readwrite",
+    "deletable": true
+  },
+  {
+    "name": "gdap-emr-admin",
+    "deletable": true
+  },
+  {
+    "name": "gdap-emr-read-write",
+    "deletable": true
+  },
+  {
+    "name": "gdap-test",
+    "deletable": true
+  },
+  {
+    "name": "gdapdevtalend",
+    "deletable": true
+  },
+  {
+    "name": "gdapprodtalend",
+    "deletable": true
+  },
+  {
+    "name": "GDQE",
+    "deletable": true
+  },
+  {
+    "name": "gls",
+    "deletable": true
+  },
+  {
+    "name": "gls-admin",
+    "deletable": true
+  },
+  {
+    "name": "gma",
+    "deletable": true
+  },
+  {
+    "name": "gma-adapter",
+    "deletable": true
+  },
+  {
+    "name": "gma-android",
+    "deletable": true
+  },
+  {
+    "name": "gma-au",
+    "deletable": true
+  },
+  {
+    "name": "gma-au-readonly",
+    "deletable": true
+  },
+  {
+    "name": "gma-ca",
+    "deletable": true
+  },
+  {
+    "name": "gma-ch",
+    "deletable": true
+  },
+  {
+    "name": "gma-cn",
+    "deletable": true
+  },
+  {
+    "name": "gma-de-merge",
+    "deletable": true
+  },
+  {
+    "name": "gma-de-read-write",
+    "deletable": true
+  },
+  {
+    "name": "gma-feature-tron-branch",
+    "deletable": true
+  },
+  {
+    "name": "gma-hk",
+    "deletable": true
+  },
+  {
+    "name": "gma-ios",
+    "deletable": true
+  },
+  {
+    "name": "gma-lite",
+    "deletable": true
+  },
+  {
+    "name": "gma-pac",
+    "deletable": true
+  },
+  {
+    "name": "gma-qa",
+    "deletable": true
+  },
+  {
+    "name": "gma-readonly",
+    "deletable": true
+  },
+  {
+    "name": "gma-sdk",
+    "deletable": true
+  },
+  {
+    "name": "gma-se",
+    "deletable": true
+  },
+  {
+    "name": "gma-uk",
+    "deletable": true
+  },
+  {
+    "name": "gma-us",
+    "deletable": true
+  },
+  {
+    "name": "gma-us-readonly",
+    "deletable": true
+  },
+  {
+    "name": "gma-voltron",
+    "deletable": true
+  },
+  {
+    "name": "gma5",
+    "deletable": true
+  },
+  {
+    "name": "gma5-aus",
+    "deletable": true
+  },
+  {
+    "name": "gma5-canada",
+    "deletable": true
+  },
+  {
+    "name": "gma5-uk-dap",
+    "deletable": true
+  },
+  {
+    "name": "gma5-us-dap-readonly",
+    "deletable": true
+  },
+  {
+    "name": "GMA5_US_DAP",
+    "deletable": true
+  },
+  {
+    "name": "gmasdk-readonly",
+    "deletable": true
+  },
+  {
+    "name": "gts-devops",
+    "deletable": true
+  },
+  {
+    "name": "interim-app",
+    "deletable": true
+  },
+  {
+    "name": "interim-app-admin",
+    "deletable": true
+  },
+  {
+    "name": "mcd-api",
+    "deletable": true
+  },
+  {
+    "name": "mcd-cim-proxy",
+    "deletable": true
+  },
+  {
+    "name": "menu",
+    "deletable": true
+  },
+  {
+    "name": "microservice",
+    "deletable": true
+  },
+  {
+    "name": "middleware",
+    "deletable": true
+  },
+  {
+    "name": "middleware-developer",
+    "deletable": true
+  },
+  {
+    "name": "mobile-sdk",
+    "deletable": true
+  },
+  {
+    "name": "mobilesdkmw-readwrite",
+    "deletable": true
+  },
+  {
+    "name": "mule-admin",
+    "deletable": true
+  },
+  {
+    "name": "mule-user",
+    "deletable": true
+  },
+  {
+    "name": "muleesb",
+    "deletable": true
+  },
+  {
+    "name": "music",
+    "deletable": true
+  },
+  {
+    "name": "newrelic&ELK",
+    "deletable": true
+  },
+  {
+    "name": "offers-read-write",
+    "deletable": true
+  },
+  {
+    "name": "Offers_ReadOnly",
+    "deletable": true
+  },
+  {
+    "name": "order-transformation-rw",
+    "deletable": true
+  },
+  {
+    "name": "poc",
+    "deletable": true
+  },
+  {
+    "name": "QE Test",
+    "deletable": true
+  },
+  {
+    "name": "read-only-for-all-project",
+    "deletable": true
+  },
+  {
+    "name": "read-write-all-projects",
+    "deletable": true
+  },
+  {
+    "name": "readonly",
+    "deletable": true
+  },
+  {
+    "name": "sapient",
+    "deletable": true
+  },
+  {
+    "name": "sapient-au",
+    "deletable": true
+  },
+  {
+    "name": "satl-rscripts-rw",
+    "deletable": true
+  },
+  {
+    "name": "screens",
+    "deletable": true
+  },
+  {
+    "name": "sdk-android",
+    "deletable": true
+  },
+  {
+    "name": "sdk-ios",
+    "deletable": true
+  },
+  {
+    "name": "sdk-pilot-read-write-access",
+    "deletable": true
+  },
+  {
+    "name": "sdkwrapper-test-app",
+    "deletable": true
+  },
+  {
+    "name": "sim",
+    "deletable": true
+  },
+  {
+    "name": "stash-admins",
+    "deletable": true
+  },
+  {
+    "name": "stash-project-creator",
+    "deletable": true
+  },
+  {
+    "name": "stash-users",
+    "deletable": true
+  },
+  {
+    "name": "Steria",
+    "deletable": true
+  },
+  {
+    "name": "strategic-enablers-read-write",
+    "deletable": true
+  },
+  {
+    "name": "Switzerland",
+    "deletable": true
+  },
+  {
+    "name": "talend",
+    "deletable": true
+  },
+  {
+    "name": "test-automation",
+    "deletable": true
+  },
+  {
+    "name": "test-scripts",
+    "deletable": true
+  },
+  {
+    "name": "test-scripts-4.x",
+    "deletable": true
+  },
+  {
+    "name": "test-scripts-readonly",
+    "deletable": true
+  },
+  {
+    "name": "tf-provisioning",
+    "deletable": true
+  },
+  {
+    "name": "ts-readwrite",
+    "deletable": true
+  },
+  {
+    "name": "UK&I_MDAP_RW",
+    "deletable": true
+  },
+  {
+    "name": "uk-ios",
+    "deletable": true
+  },
+  {
+    "name": "VAT-VanguardArchitectureAdmin",
+    "deletable": true
+  },
+  {
+    "name": "VET-CapabilityDevSecOpsAdmin",
+    "deletable": true
+  },
+  {
+    "name": "VET-DevSecOpsAdmin",
+    "deletable": true
+  },
+  {
+    "name": "VET-Support",
+    "deletable": true
+  },
+  {
+    "name": "web-commerce",
+    "deletable": true
+  },
+  {
+    "name": "web_commerce_global",
+    "deletable": true
+  }
+]
