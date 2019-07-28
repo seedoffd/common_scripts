@@ -15,4 +15,7 @@ for user in data:
         "role"      : user.role
       })
 
+
 print(json.dumps(output_users, indent=2))
+with open('users.json', 'w') as file:
+    json.dump(output_users, file, indent=2)
