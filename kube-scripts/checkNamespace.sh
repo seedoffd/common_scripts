@@ -5,3 +5,8 @@ if [[ $(kubectl get ns "$NAMESPACE" 2>/dev/null ) ]]; then
 else
   echo 'namespace is not exist'
 fi
+
+
+if [[ ! $(kubectl get ns "$NAMESPACE" 2>/dev/null ) ]]; then
+  echo 'name space does not exist'
+fi
