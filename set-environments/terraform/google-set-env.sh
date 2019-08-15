@@ -2,6 +2,10 @@
 
 DIR=$(pwd)
 DATAFILE="$DIR/$1"
+#
+# FuchiCorp common script to set up Google terraform environment variables
+# these all variables should be created on your config file before you run script.
+# <ENVIRONMENT> <BUCKET> <DEPLOYMENT> <PROJECT> <CREDENTIALS>
 
 ENVIRONMENT=$(sed -nr 's/^environment\s*=\s*"([^"]*)".*$/\1/p' "$DATAFILE")
 BUCKET=$(sed -nr 's/^bucket_name\s*=\s*"([^"]*)".*$/\1/p' "$DATAFILE")
@@ -23,13 +27,13 @@ fi
 
 if [ -z "$BUCKET" ]
 then
-  echo "setenv: 'bucket_name' variable not set in configuration file. Using $BUCKET"
+  echo "setenv: 'bucket_name' variable not set in configuration file."
   return 1
 fi
 
 if [ -z "$PROJECT" ]
 then
-    echo "setenv: 'project_name' variable not set in configuration file. Using $PROJECT"
+    echo "setenv: 'project_name' variable not set in configuration file."
     return 1
 fi
 
