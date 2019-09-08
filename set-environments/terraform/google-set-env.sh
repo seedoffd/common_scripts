@@ -16,15 +16,15 @@ wget --quiet -O "$PWD/common_configuration.tfvars"\
   "https://raw.githubusercontent.com/fuchicorp/main-fuchicorp/master/project-configuration/google_account_information.tfvars"
 
 
-BUCKET=$(sed -nr 's/^google_bucket_name\s*=\s*"([^"]*)".*$/\1/p' "$PWD/common_configuration.tfvars")
-PROJECT=$(sed -nr 's/^google_project_id\s*=\s*"([^"]*)".*$/\1/p' "$PWD/common_configuration.tfvars")
-ENVIRONMENT=$(sed -nr 's/^environment\s*=\s*"([^"]*)".*$/\1/p'    "$DATAFILE")
-DEPLOYMENT=$(sed -nr 's/^deployment_name\s*=\s*"([^"]*)".*$/\1/p' "$DATAFILE")
-CREDENTIALS=$(sed -nr 's/^credentials\s*=\s*"([^"]*)".*$/\1/p'    "$DATAFILE")
+BUCKET=$(sed -nr 's/^google_bucket_name\s*=\s*"([^"]*)".*$/\1/p'             "$PWD/common_configuration.tfvars")
+PROJECT=$(sed -nr 's/^google_project_id\s*=\s*"([^"]*)".*$/\1/p'             "$PWD/common_configuration.tfvars")
+ENVIRONMENT=$(sed -nr 's/^deployment_environment\s*=\s*"([^"]*)".*$/\1/p'    "$DATAFILE")
+DEPLOYMENT=$(sed -nr 's/^deployment_name\s*=\s*"([^"]*)".*$/\1/p'            "$DATAFILE")
+CREDENTIALS=$(sed -nr 's/^credentials\s*=\s*"([^"]*)".*$/\1/p'               "$DATAFILE")
 
 if [ -z "$ENVIRONMENT" ]
 then
-    echo "setenv: 'environment' variable not set in configuration file."
+    echo "setenv: 'deployment_environment' variable not set in configuration file."
     return 1
 fi
 
