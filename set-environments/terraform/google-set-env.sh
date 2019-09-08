@@ -65,7 +65,7 @@ EOF
 GOOGLE_APPLICATION_CREDENTIALS="${DIR}/${CREDENTIALS}"
 export GOOGLE_APPLICATION_CREDENTIALS
 export DATAFILE
-{ rm -rf "$DIR/.terraform" 2>/dev/null } || { echo "The terraform folder does not exist!!" }
+rm -rf "$DIR/.terraform" 2>/dev/null 
 rm -rf "$PWD/common_configuration.tfvars"
 echo "setenv: Initializing terraform"
 terraform init #> /dev/null
