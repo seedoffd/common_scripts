@@ -1,21 +1,20 @@
 import json
-from app import User
+from app import User, db
 
-output_users = []
-data = User.query.all()
-
-for user in data:
-    output_users.append(
-      {
-        "firstname" : user.firstname,
-        "lastname"  : user.lastname,
-        "username"  : user.username,
-        "password"  : user.password,
-        "email"     : user.email,
-        "role"      : user.role
-      })
+with open('users.json') as file:
+    data = json.load(output_users)
 
 
-print(json.dumps(output_users, indent=2))
-with open('users.json', 'w') as file:
-    json.dump(output_users, file, indent=2)
+for item in data:
+    user = User(firstname=item['firstname'],
+    lastname=item['lastname'],
+    password=item['password'],
+    status='True',
+    username=item['username'],
+    role=item['role'],
+    email=item['email'])
+    try:
+        db.session.add(user)
+        db.session.commit()
+    except:
+        print('User has problem')
