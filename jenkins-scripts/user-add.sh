@@ -12,4 +12,4 @@ else
 fi
 
 
-var = ["fsadykov", "NadiraSaip", "amdade", "seedoffd", "addiani", "daudmu21", "Nurjan87", "LeilaDev", "Khuslentuguldur", "chaglare", "leventelibal", "jsartbaeva90", "mcalik77", "jipara"]
+var = ["fsadykov", "NadiradSaip", "amdade", "seedoffd", "addiani", "daudmu21", "Nurjan87", "LeilaDev", "Khuslentuguldur", "chaglare", "leventelibal", "jsartbaeva90", "mcalik77", "jipara"]
