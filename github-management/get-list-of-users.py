@@ -30,7 +30,8 @@ def is_user_member(username):
 
 
 if __name__ == '__main__':
-    if is_user_member("usku"):
+    print(find_team_id("academy-students"))
+    if is_user_member("beamsoul"):
         print("Yes this use is in the system")
     else:
         print("This user is not in the list")
