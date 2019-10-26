@@ -76,6 +76,7 @@ for team in fuchi_org.get_teams():
     root_members = templetize_user_data(root_access_teams, team)
     if root_members:
         for user in root_members:
+            print(f"""'{user["username"]}' '{user["comment"]}' '{user["username"]}.key'""")
             # os.system(f"""
             # sudo bash user_add.sh '{user["username"]}' '{user["comment"]}' '{user["username"]}.key' --admin""")
             bastion_access["root_access"].append(user)
@@ -84,7 +85,7 @@ for team in fuchi_org.get_teams():
     non_root_members = templetize_user_data(non_root_access_teams, team)
     if non_root_members:
         for user in non_root_members:
-
+            print(f"""'{user["username"]}' '{user["comment"]}' '{user["username"]}.key'""")
             # os.system(f"""
             # sudo bash user_add.sh '{user["username"]}' '{user["comment"]}' '{user["username"]}.key' """)
             bastion_access["non_root_access"].append(user)

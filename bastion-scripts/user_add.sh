@@ -31,16 +31,11 @@ if [[ $EUID -ne 0 ]]; then
   exit 1
 fi
 
-if [[ "$2" != *"<"*"@"*">"* ]]; then
-  echo "${red}Second argument should be in the format: ${green}First Name Last Name <email@example.com>${reset}"
-  exit 2
-fi
-
 # Meat and Potatoes
 
 pecho "${yellow}Username:${reset} $1"
 pecho "${yellow}Name and Email:${reset} $2"
-pecho "${yellow}SSH Public Key:${reset} $3"
+pecho "${yellow}SSH PublicKey file:${reset} $3"
 
 pecho "${green}Created user.${reset}"
 useradd -m "$1" -c "$2"
