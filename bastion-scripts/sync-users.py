@@ -77,8 +77,7 @@ for team in fuchi_org.get_teams():
     if root_members:
         for user in root_members:
             # print(f"""'{user["username"]}' '{user["comment"]}' '{user["username"]}.key'""")
-            os.system(f"""
-            sudo sh user_add.sh {user["username"]} {user["comment"]} {user["username"]}.key --admin""")
+            os.system(f"""sudo sh user_add.sh {user["username"]} '{user["comment"]}' {user["username"]}.key --admin""")
             bastion_access["root_access"].append(user)
 
     ## Getting non root members
@@ -87,7 +86,7 @@ for team in fuchi_org.get_teams():
         for user in non_root_members:
             # print(f"""'{user["username"]}' '{user["comment"]}' '{user["username"]}.key'""")
             os.system(f"""
-            sudo sh user_add.sh {user["username"]} {user["comment"]} {user["username"]}.key """)
+            sudo sh user_add.sh {user["username"]} '{user["comment"]}' {user["username"]}.key """)
             bastion_access["non_root_access"].append(user)
 
 
