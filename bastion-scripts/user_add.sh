@@ -36,7 +36,8 @@ echo "${yellow}Name and Email:${reset} $2"
 echo "${yellow}SSH PublicKey file:${reset} $3"
 
 if [ ! -d "/home/$1/" ]; then
-  useradd "$1" --comment "$2"
+  # useradd "$1" --comment "$2"
+  useradd "$1"
   echo "${green}Created user <$1>.${reset}"
 else
   echo "${yellow}User already exist.${reset}"
