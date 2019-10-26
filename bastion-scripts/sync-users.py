@@ -45,14 +45,19 @@ def templetize_user_data(team_list:list, team_object:object):
                 ## if the user has ssh keys
                 if user.get_keys().totalCount:
 
+                    ## Checking file exists if yes then delete
+                    if os.path.isfile(f'{user_data["username"]}.key'):
+                        os.remove(f'{user_data["username"]}.key')
+
                     ## Iterating list of users keys
                     for key in user.get_keys():
 
                         ## Adding list of keys to user data
                         user_data['ssh-keys'].append(key.key)
 
+
                         ## Createing the keys for the users
-                        with open(f'{user_data["username"]}.key', 'w') as f:
+                        with open(f'{user_data["username"]}.key', 'a') as f:
                             f.write("%s\n" % key.key)
 
 
@@ -71,8 +76,8 @@ for team in fuchi_org.get_teams():
     root_members = templetize_user_data(root_access_teams, team)
     if root_members:
         for user in root_members:
-            os.system(f"""
-            sudo bash user_add.sh '{user["username"]}' '{user["comment"]}' '{user["username"]}.key' --admin""")
+            # os.system(f"""
+            # sudo bash user_add.sh '{user["username"]}' '{user["comment"]}' '{user["username"]}.key' --admin""")
             bastion_access["root_access"].append(user)
 
     ## Getting non root members
@@ -80,8 +85,8 @@ for team in fuchi_org.get_teams():
     if non_root_members:
         for user in non_root_members:
 
-            os.system(f"""
-            sudo bash user_add.sh '{user["username"]}' '{user["comment"]}' '{user["username"]}.key' """)
+            # os.system(f"""
+            # sudo bash user_add.sh '{user["username"]}' '{user["comment"]}' '{user["username"]}.key' """)
             bastion_access["non_root_access"].append(user)
 
 
