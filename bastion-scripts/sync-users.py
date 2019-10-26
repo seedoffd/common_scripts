@@ -71,25 +71,25 @@ def templetize_user_data(team_list:list, team_object:object):
 
 if not os.geteuid() == 0:
     sys.exit("\nOnly root can run this script\n")
-    
+
 for team in fuchi_org.get_teams():
 
     # Getting root members
     root_members = templetize_user_data(root_access_teams, team)
     if root_members:
         for user in root_members:
-            # print(f"""'{user["username"]}' '{user["comment"]}' '{user["username"]}.key'""")
-            os.system(f"""sudo sh user_add.sh {user["username"]} '{user["comment"]}' {user["username"]}.key --admin""")
-            bastion_access["root_access"].append(user)
+            print(f"""###### {user["username"]} '{user["comment"]}' {user["username"]}.key --admin""")
+            # os.system(f"""sudo sh user_add.sh {user["username"]} '{user["comment"]}' {user["username"]}.key --admin""")
+            # bastion_access["root_access"].append(user)
 
     ## Getting non root members
     non_root_members = templetize_user_data(non_root_access_teams, team)
     if non_root_members:
         for user in non_root_members:
-            # print(f"""'{user["username"]}' '{user["comment"]}' '{user["username"]}.key'""")
-            os.system(f"""
-            sudo sh user_add.sh {user["username"]} '{user["comment"]}' {user["username"]}.key """)
-            bastion_access["non_root_access"].append(user)
+            print(f"""###### {user["username"]} '{user["comment"]}' {user["username"]}.key """)
+            # os.system(f"""
+            # sudo sh user_add.sh {user["username"]} '{user["comment"]}' {user["username"]}.key """)
+            # bastion_access["non_root_access"].append(user)
 
 
 # with open("output.json") as file:
