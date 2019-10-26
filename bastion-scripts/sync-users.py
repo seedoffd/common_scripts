@@ -40,7 +40,7 @@ def templetize_user_data(team_list:list, team_object:object):
 
                 ## templetizing the user data
                 user_data = {"username" : user.login, "ssh-keys" : [],
-                "comment" : f"User Name: <{user.name}>, Email: <{user.email}>, Company: <{user.company}>"}
+                "comment" : f"<{user.name}>, <{user.email}>, <{user.company}>"}
 
                 ## if the user has ssh keys
                 if user.get_keys().totalCount:
