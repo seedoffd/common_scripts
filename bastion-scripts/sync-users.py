@@ -10,7 +10,7 @@ g = Github(os.environ.get("GIT_TOKEN"))
 
 organization_name = "fuchicorp"
 root_access_teams = ["devops", "bastion_root"]
-non_root_access_teams = ["members", "dev"]
+non_root_access_teams = ["dev"]
 
 fuchi_org = g.get_organization(organization_name)
 
@@ -79,7 +79,7 @@ for team in fuchi_org.get_teams():
     if root_members:
         for user in root_members:
             # print(f"""###### {user["username"]} '{user["comment"]}' {user["username"]}.key --admin""")
-            os.system(f"""sudo sh user_add.sh {user["username"]} '{user["comment"]}' {user["username"]}.key --admin""")
+            os.system(f"""sudo sh user_add.sh {user["username"]} '{user["comment"]}' {user["username"]}.key""")
             bastion_access["root_access"].append(user)
 
     ## Getting non root members
@@ -92,11 +92,5 @@ for team in fuchi_org.get_teams():
             bastion_access["non_root_access"].append(user)
 
 
-# with open("output.json") as file:
-#     data = json.load(file)
-## Creating root users
-    # os.system(f"sh user_add.sh {user.username} '{user.comment}' ''")
-# print(json.dumps(bastion_access['non_root_access'], indent=2))
-#
 with open("output.json", "w") as file:
     json.dump(bastion_access, file, indent=2)
