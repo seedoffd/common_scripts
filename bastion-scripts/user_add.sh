@@ -21,19 +21,19 @@ fi
 # Prechecks
 
 if [ "$#" -lt 3 ]; then
-  echo "${red}More arguments required.${reset}"
-  echo -e "$0 username \"Person's Name <email@example.com\" \"ssh-key\" [--admin]"
+  debugMode "${red}More arguments required.${reset}"
+  debugMode -e "$0 username \"Person's Name <email@example.com\" \"ssh-key\" [--admin]"
   exit 1
 fi
 
 if [[ $EUID -ne 0 ]]; then
-  echo "This script must be run as root"
+  debugMode "This script must be run as root"
   exit 1
 fi
 
-echo "${yellow}Username:${reset} $1"
-echo "${yellow}Name and Email:${reset} $2"
-echo "${yellow}SSH PublicKey file:${reset} $3"
+debugMode "${yellow}Username:${reset} $1"
+debugMode "${yellow}Name and Email:${reset} $2"
+debugMode "${yellow}SSH PublicKey file:${reset} $3"
 
 if [ ! -d "/home/$1/" ]; then
   useradd "$1" --comment "$2"
@@ -44,15 +44,15 @@ fi
 
 if [ ! -d "/home/$1/.ssh" ]; then
   mkdir -p "/home/$1/.ssh"
-  echo "${green}Creating user's SSH directory.${reset}"
+  debugMode "${green}Creating user's SSH directory.${reset}"
 else
-  echo "${yellow}User's ssh folder already exist.${reset}"
+  debugMode "${yellow}User's ssh folder already exist.${reset}"
 fi
 
-echo "${yellow}Updating the authorized_keys file${reset}"
+debugMode "${yellow}Updating the authorized_keys file${reset}"
 cat "$3" > "/home/$1/.ssh/authorized_keys"
 
-echo "${yellow}Setting permissions.${reset}"
+debugMode "${yellow}Setting permissions.${reset}"
 chmod 700 "/home/$1/.ssh"
 chmod 600 "/home/$1/.ssh/authorized_keys"
 chown -R "$1":"$1" "/home/$1/.ssh"
