@@ -69,7 +69,9 @@ def templetize_user_data(team_list:list, team_object:object):
     ## Returing list of users to
     return user_list
 
-
+if not os.geteuid() == 0:
+    sys.exit("\nOnly root can run this script\n")
+    
 for team in fuchi_org.get_teams():
 
     # Getting root members
