@@ -12,7 +12,7 @@ reset=$(tput sgr0)
 
 debug=0
 
-pecho () {
+debugMode () {
 if [ "$debug" -eq 1 ]; then
   echo "$1"
 fi
@@ -31,27 +31,34 @@ if [[ $EUID -ne 0 ]]; then
   exit 1
 fi
 
-# Meat and Potatoes
+echo "${yellow}Username:${reset} $1"
+echo "${yellow}Name and Email:${reset} $2"
+echo "${yellow}SSH PublicKey file:${reset} $3"
 
-pecho "${yellow}Username:${reset} $1"
-pecho "${yellow}Name and Email:${reset} $2"
-pecho "${yellow}SSH PublicKey file:${reset} $3"
+if [ ! -d "/home/$1/" ]; then
+  useradd "$1" --comment "$2"
+  echo "${green}Created user <$1>.${reset}"
+else
+  echo "${yellow}User already exist.${reset}"
+fi
 
-pecho "${green}Created user.${reset}"
-useradd -m "$1" -c "$2"
-pecho "${green}Creating user's SSH directory.${reset}"
-mkdir -p "/home/$1/.ssh"
-pecho "${yellow}Appending key to authorized_keys${reset}"
-  cat "$3" >> "/home/$1/.ssh/authorized_keys"
-pecho "${yellow}Setting permissions.${reset}"
+if [ ! -d "/home/$1/.ssh" ]; then
+  mkdir -p "/home/$1/.ssh"
+  echo "${green}Creating user's SSH directory.${reset}"
+else
+  echo "${yellow}User's ssh folder already exist.${reset}"
+fi
+
+echo "${yellow}Updating the authorized_keys file${reset}"
+cat "$3" > "/home/$1/.ssh/authorized_keys"
+
+echo "${yellow}Setting permissions.${reset}"
 chmod 700 "/home/$1/.ssh"
 chmod 600 "/home/$1/.ssh/authorized_keys"
 chown -R "$1":"$1" "/home/$1/.ssh"
-pecho "${yellow}Setting Group privileges.${reset}"
-# usermod -aG docker "$1"
 
 if [ "$4" = "--admin" ]; then
-  pecho "${yellow}Setting Admin privileges.${reset}"
+  echo "${yellow}Setting Admin privileges.${reset}"
   usermod -aG wheel "$1"
 fi
 
