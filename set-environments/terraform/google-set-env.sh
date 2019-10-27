@@ -66,7 +66,7 @@ cat "$DIR/backend.tf"
 GOOGLE_APPLICATION_CREDENTIALS="${DIR}/${CREDENTIALS}"
 export GOOGLE_APPLICATION_CREDENTIALS
 export DATAFILE
-rm -rf "$DIR/.terraform" 2>/dev/null
-rm -rf "$PWD/common_configuration.tfvars"
+/bin/rm -rf "$DIR/.terraform" 2>/dev/null
+/bin/rm -rf "$PWD/common_configuration.tfvars"
 echo "setenv: Initializing terraform"
 terraform init #> /dev/null
