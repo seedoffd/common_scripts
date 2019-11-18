@@ -52,6 +52,28 @@ if curl --version >/dev/null; then
           echo -e "${RED}#---    Error Terraform versions is not selecrted.      ---#${RESET}"
         fi
 
+      elif [[ "$OSTYPE" == "linux"* ]]; then
+        # If OS type is Linux then script will provide available versions
+        echo -e  "$foundTerraformVersions"
+        if terraform -version > /dev/null; then
+          INSTALLED_TERRAFORM=$(terraform -version  | head -n1 | awk '{print $2}')
+          echo -e "${GREEN}Current version: ${INSTALLED_TERRAFORM}${RESET}"
+        fi
+        read -p "${GREEN}Please sellect one version to download: ${RESET}" SELLECTEDVERSION
+        if [[ "$SELLECTEDVERSION" ]]; then
+          echo -e "$(tput setaf 2)#--- Downloading the terraform for this linux. ---#"
+          wget -q --progress=bar:force  "https://releases.hashicorp.com/terraform/${SELLECTEDVERSION}/terraform_${SELLECTEDVERSION}_linux_amd64.zip" 2>&1
+
+          # after user select existing terraform version
+          # script will extract the zip file and move terraform to executable place </usr/local/bin>
+
+
+          echo -e "${GREEN}#---    Moving terraform to bin folder.      ---#${RESET}"
+          unzip "terraform_${SELLECTEDVERSION}_linux_amd64.zip" && sudo mv "./terraform" "$TERRAFORM_HOME/terraform"
+          rm -rf "terraform_${SELLECTEDVERSION}_linux_amd64.zip"
+        else
+          echo -e "${RED}#---    Error terraform versions is not selecrted.      ---#${RESET}"
+        fi
       fi
     else
       echo -e "${RED}#---    Error wget command not found.      ---#${RESET}"
