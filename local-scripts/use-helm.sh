@@ -11,6 +11,9 @@
 #     exit 1
 # fi
 
+
+
+
 #Some collors for human friendly
 RED=`tput setaf 1`
 GREEN=`tput setaf 2`
@@ -55,26 +58,31 @@ if curl --version >/dev/null; then
 
 
       elif [[ "$OSTYPE" == "linux"* ]]; then
-        # If OS type is Apple then script will provide available versions
-        echo -e  "$foundHelmVersions"
-        if helm version --client > /dev/null; then
-          INSTALLED_HELM=$(helm version --client  | awk '{print $2}' | cut -c 25-33 | sed 's/"//g')
-          echo -e "${GREEN}Current version: ${INSTALLED_HELM}${RESET}"
-        fi
-        echo -e "${GREEN}Please sellect one version to download: ${RESET}"  && read SELLECTEDVERSION
-        if [[ "$SELLECTEDVERSION" ]]; then
-          echo -e "$(tput setaf 2)#--- Downloading the kubectl for this MAC. ---#"
-          wget -q --progress=bar:force  "https://get.helm.sh/helm-${SELLECTEDVERSION}-linux-amd64.tar.gz" 2>&1
 
-          # after user select existing kubectl version
+        WHEEL_ACCESS=$(groups $USER | grep -o "wheel")
 
-          tar -xzvf "helm-${SELLECTEDVERSION}-linux-amd64.tar.gz"
-          sudo mv "./linux-amd64/helm" "$HELM_HOME/helm"
-          sudo rm -rf "helm-${SELLECTEDVERSION}-linux-amd64.tar.gz"
+        if [[ $WHEEL_ACCESS ]]; then
+          # If OS type is Apple then script will provide available versions
+          echo -e  "$foundHelmVersions"
+          if helm version --client > /dev/null; then
+            INSTALLED_HELM=$(helm version --client  | awk '{print $2}' | cut -c 25-33 | sed 's/"//g')
+            echo -e "${GREEN}Current version: ${INSTALLED_HELM}${RESET}"
+          fi
+          echo -e "${GREEN}Please sellect one version to download: ${RESET}"  && read SELLECTEDVERSION
+          if [[ "$SELLECTEDVERSION" ]]; then
+            echo -e "$(tput setaf 2)#--- Downloading the kubectl for this MAC. ---#"
+            wget -q --progress=bar:force  "https://get.helm.sh/helm-${SELLECTEDVERSION}-linux-amd64.tar.gz" 2>&1
 
-          echo -e "${GREEN}#---    Moving kubectl to bin folder.      ---#${RESET}"
-        else
-          echo -e "${RED}#---    Error Kubectl versions is not selecrted.      ---#${RESET}"
+            # after user select existing kubectl version
+
+            tar -xzvf "helm-${SELLECTEDVERSION}-linux-amd64.tar.gz"
+            sudo mv "./linux-amd64/helm" "$HELM_HOME/helm"
+            sudo rm -rf "helm-${SELLECTEDVERSION}-linux-amd64.tar.gz"
+
+            echo -e "${GREEN}#---    Moving kubectl to bin folder.      ---#${RESET}"
+          else
+            echo -e "${RED}#---    Error Kubectl versions is not selecrted.      ---#${RESET}"
+          fi
         fi
       fi
     else

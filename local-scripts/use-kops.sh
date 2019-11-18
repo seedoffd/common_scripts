@@ -53,23 +53,27 @@ if curl --version >/dev/null; then
 
 
       elif [[ "$OSTYPE" == "linux"* ]]; then
-        # If OS type is Apple then script will provide available versions
-        echo -e  "$foundHelmVersions"
-        if kops version  > /dev/null; then
-          INSTALLED_KOPS=$(kops version | awk '{print $2}')
-          echo -e "${GREEN}Current version: ${INSTALLED_KOPS}${RESET}"
-        fi
-        echo -e "${GREEN}Please sellect one version to download: ${RESET}"  && read SELLECTEDVERSION
-        if [[ "$SELLECTEDVERSION" ]]; then
-          echo -e "$(tput setaf 2)#--- Downloading the kops for this $OSTYPE. ---#"
-          wget -q --progress=bar:force  "https://github.com/kubernetes/kops/releases/download/${SELLECTEDVERSION}/kops-linux-amd64" -O "./kops" 2>&1
-          # after user select existing kubectl version
-          sudo mv "./kops" "$KOPS_HOME/kops" && sudo chmod +x "$KOPS_HOME/kops"
+        WHEEL_ACCESS=$(groups $USER | grep -o "wheel")
+
+        if [[ $WHEEL_ACCESS ]]; then
+          # If OS type is Apple then script will provide available versions
+          echo -e  "$foundHelmVersions"
+          if kops version  > /dev/null; then
+            INSTALLED_KOPS=$(kops version | awk '{print $2}')
+            echo -e "${GREEN}Current version: ${INSTALLED_KOPS}${RESET}"
+          fi
+          echo -e "${GREEN}Please sellect one version to download: ${RESET}"  && read SELLECTEDVERSION
+          if [[ "$SELLECTEDVERSION" ]]; then
+            echo -e "$(tput setaf 2)#--- Downloading the kops for this $OSTYPE. ---#"
+            wget -q --progress=bar:force  "https://github.com/kubernetes/kops/releases/download/${SELLECTEDVERSION}/kops-linux-amd64" -O "./kops" 2>&1
+            # after user select existing kubectl version
+            sudo mv "./kops" "$KOPS_HOME/kops" && sudo chmod +x "$KOPS_HOME/kops"
 
 
-          echo -e "${GREEN}#---    Moving kubectl to bin folder.      ---#${RESET}"
-        else
-          echo -e "${RED}#---    Error Kubectl versions is not selecrted.      ---#${RESET}"
+            echo -e "${GREEN}#---    Moving kubectl to bin folder.      ---#${RESET}"
+          else
+            echo -e "${RED}#---    Error Kubectl versions is not selecrted.      ---#${RESET}"
+          fi
         fi
       else
         echo "Sorry this script does not support $OSTYPE"

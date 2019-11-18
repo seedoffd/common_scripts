@@ -54,25 +54,29 @@ if curl --version >/dev/null; then
 
 
       elif [[ "$OSTYPE" == "linux"* ]]; then
-        # If OS type is Linux then script will provide available versions
-        echo -e  "$foundKubectlVersions"
-        if kubectl version > /dev/null; then
-          INSTALLED_KUBECTL=$(kubectl version  --client  | awk '{print $5}' | sed -nr 's/^GitVersion\s*:\s*"([^"]*)".*$/\1/p')
-          echo -e "${GREEN}Current version: ${INSTALLED_KUBECTL}${RESET}"
-        fi
-        read -p "${GREEN}Please sellect one version to download: ${RESET}" SELLECTEDVERSION
-        if [[ "$SELLECTEDVERSION" ]]; then
-          echo -e "$(tput setaf 2)#--- Downloading the kubectl for this linux. ---#"
-          wget -q --progress=bar:force  "https://storage.googleapis.com/kubernetes-release/release/${SELLECTEDVERSION}/bin/linux/amd64/kubectl" 2>&1
+        WHEEL_ACCESS=$(groups $USER | grep -o "wheel")
 
-          # after user select existing kubectl version
-          # script will extract the zip file and move kubectl to executable place </usr/local/bin>
-          sudo chmod +x kubectl
-          sudo mv kubectl "${KUBECTL_HOME}/kubectl"
+        if [[ $WHEEL_ACCESS ]]; then
+          # If OS type is Linux then script will provide available versions
+          echo -e  "$foundKubectlVersions"
+          if kubectl version > /dev/null; then
+            INSTALLED_KUBECTL=$(kubectl version  --client  | awk '{print $5}' | sed -nr 's/^GitVersion\s*:\s*"([^"]*)".*$/\1/p')
+            echo -e "${GREEN}Current version: ${INSTALLED_KUBECTL}${RESET}"
+          fi
+          read -p "${GREEN}Please sellect one version to download: ${RESET}" SELLECTEDVERSION
+          if [[ "$SELLECTEDVERSION" ]]; then
+            echo -e "$(tput setaf 2)#--- Downloading the kubectl for this linux. ---#"
+            wget -q --progress=bar:force  "https://storage.googleapis.com/kubernetes-release/release/${SELLECTEDVERSION}/bin/linux/amd64/kubectl" 2>&1
 
-          echo -e "${GREEN}#---    Moving kubectl to bin folder.      ---#${RESET}"
-        else
-          echo -e "${RED}#---    Error Kubectl versions is not selecrted.      ---#${RESET}"
+            # after user select existing kubectl version
+            # script will extract the zip file and move kubectl to executable place </usr/local/bin>
+            sudo chmod +x kubectl
+            sudo mv kubectl "${KUBECTL_HOME}/kubectl"
+
+            echo -e "${GREEN}#---    Moving kubectl to bin folder.      ---#${RESET}"
+          else
+            echo -e "${RED}#---    Error Kubectl versions is not selecrted.      ---#${RESET}"
+          fi
         fi
       fi
     else
