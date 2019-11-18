@@ -20,7 +20,7 @@ RESET=`tput sgr0`
 
 
 # Change this if you would like to move your kubectl home folder
-TERRAFORM_HOME='/usr/local/bin'
+KUBECTL_HOME='/usr/local/bin'
 if curl --version >/dev/null; then
 
   # Getting all available versions from github .
@@ -45,7 +45,7 @@ if curl --version >/dev/null; then
           # after user select existing kubectl version
 
           chmod +x kubectl
-          mv kubectl /usr/local/bin/kubectl
+          mv kubectl "${KUBECTL_HOME}/kubectl"
 
           echo -e "${GREEN}#---    Moving kubectl to bin folder.      ---#${RESET}"
         else
@@ -68,7 +68,7 @@ if curl --version >/dev/null; then
           # after user select existing kubectl version
           # script will extract the zip file and move kubectl to executable place </usr/local/bin>
           sudo chmod +x kubectl
-          sudo mv kubectl /usr/local/bin/kubectl
+          sudo mv kubectl "${KUBECTL_HOME}/kubectl"
 
           echo -e "${GREEN}#---    Moving kubectl to bin folder.      ---#${RESET}"
         else
