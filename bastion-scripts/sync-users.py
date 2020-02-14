@@ -12,7 +12,7 @@ organization_name = "fuchicorp"
 root_access_teams = ["devops", "bastion_root"]
 non_root_access_teams = ["dev"]
 
-fuchi_org = g.get_organization(organization_name)
+organization = g.get_organization(organization_name)
 
 
 bastion_access = {
@@ -30,7 +30,7 @@ def templetize_user_data(team_list:list, team_object:object):
 
         ## Iterating list of user
         logging.info(f"####### Getting all members from team <{team_object.name}>")
-        for user in fuchi_org.get_team(team_object.id).get_members():
+        for user in organization.get_team(team_object.id).get_members():
 
             ## Checking is the user already adeed
             if user.login not in uniq_users:
@@ -72,14 +72,14 @@ def templetize_user_data(team_list:list, team_object:object):
 if not os.geteuid() == 0:
     sys.exit("\nOnly root can run this script\n")
 
-for team in fuchi_org.get_teams():
+for team in organization.get_teams():
 
     # Getting root members
     root_members = templetize_user_data(root_access_teams, team)
     if root_members:
         for user in root_members:
             # print(f"""###### {user["username"]} '{user["comment"]}' {user["username"]}.key --admin""")
-            os.system(f"""sudo sh user_add.sh {user["username"]} '{user["comment"]}' {user["username"]}.key""")
+            os.system(f"""sudo sh user_add.sh {user["username"]} '{user["comment"]}' {user["username"]}.key --admin""")
             bastion_access["root_access"].append(user)
 
     ## Getting non root members
