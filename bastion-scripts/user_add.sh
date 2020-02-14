@@ -60,6 +60,7 @@ chown -R "$1":"$1" "/home/$1/.ssh"
 if [ "$4" = "--admin" ]; then
   echo "${yellow}Setting Admin privileges.${reset}"
   usermod -aG wheel "$1"
+  sed 's/# %wheel/%wheel/g' -i /etc/sudoers  
 fi
 
 echo "${green}Created user (${yellow}$1${green}) for $2.${reset}"
