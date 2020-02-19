@@ -30,7 +30,8 @@ def templetize_user_data(team_list:list, team_object:object):
 
         ## Iterating list of user
         logging.info(f"####### Getting all members from team <{team_object.name}>")
-        for user in organization.get_team(team_object.id).get_members():
+        member_items = organization.get_team(team_object.id).get_members()
+        for user in member_items:
 
             ## Checking is the user already adeed
             if user.login not in uniq_users:
@@ -50,7 +51,8 @@ def templetize_user_data(team_list:list, team_object:object):
                         os.remove(f'{user_data["username"]}.key')
 
                     ## Iterating list of users keys
-                    for key in user.get_keys():
+                    key_items = user.get_keys()
+                    for key in key_items:
 
                         ## Adding list of keys to user data
                         user_data['ssh-keys'].append(key.key)
@@ -72,23 +74,24 @@ def templetize_user_data(team_list:list, team_object:object):
 if not os.geteuid() == 0:
     sys.exit("\nOnly root can run this script\n")
 
-for team in organization.get_teams():
+team_items = organization.get_teams()
+for team in team_items:
 
     # Getting root members
     root_members = templetize_user_data(root_access_teams, team)
     if root_members:
         for user in root_members:
-            # print(f"""###### {user["username"]} '{user["comment"]}' {user["username"]}.key --admin""")
-            os.system(f"""sudo sh user_add.sh {user["username"]} '{user["comment"]}' {user["username"]}.key --admin""")
+            print(f"""###### {user["username"]} '{user["comment"]}' {user["username"]}.key --admin""")
+            # os.system(f"""sudo sh user_add.sh {user["username"]} '{user["comment"]}' {user["username"]}.key --admin""")
             bastion_access["root_access"].append(user)
 
     ## Getting non root members
     non_root_members = templetize_user_data(non_root_access_teams, team)
     if non_root_members:
         for user in non_root_members:
-            # print(f"""###### {user["username"]} '{user["comment"]}' {user["username"]}.key """)
-            os.system(f"""
-            sudo sh user_add.sh {user["username"]} '{user["comment"]}' {user["username"]}.key """)
+            print(f"""###### {user["username"]} '{user["comment"]}' {user["username"]}.key """)
+            # os.system(f"""
+            # sudo sh user_add.sh {user["username"]} '{user["comment"]}' {user["username"]}.key """)
             bastion_access["non_root_access"].append(user)
 
 

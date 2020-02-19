@@ -2,11 +2,11 @@
 # your server name goes here
 server=https://"$(printenv | grep KUBERNETES_SERVICE_HOST| awk -F '=' '{print $2}')":443
 # the name of the secret containing the service account token goes here
-name=fuchicorp-api-token-mw4wx
+name=tiller-token-4b527
 
-ca=$(kubectl get  secret/$name -n tools -o jsonpath='{.data.ca\.crt}')
-token=$(kubectl get  secret/$name -n tools -o jsonpath='{.data.token}' | base64 --decode)
-namespace=$(kubectl get secret/$name -n tools -o jsonpath='{.data.namespace}' | base64 --decode)
+ca=$(kubectl get  secret/$name -n kube-system -o jsonpath='{.data.ca\.crt}')
+token=$(kubectl get  secret/$name -n kube-system -o jsonpath='{.data.token}' | base64 --decode)
+namespace=$(kubectl get secret/$name -n kube-system -o jsonpath='{.data.namespace}' | base64 --decode)
 
 echo "
 apiVersion: v1
