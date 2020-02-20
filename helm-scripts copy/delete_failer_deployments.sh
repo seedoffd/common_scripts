@@ -6,3 +6,6 @@ if [[ $(helm get "$deploymentName" --tiller-namespace "tiller" 2>/dev/null ) && 
 else
       echo 'Deployment does not exist '
 fi
+
+
+deploymentName=
