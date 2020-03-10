@@ -66,6 +66,7 @@ if [ "$4" = "--admin" ]; then
   if [ -d  "/home/$1/.kube" ]; then
     cp -rf "/fuchicorp/admin_config" "/home/$1/.kube/fuchicorp-config"
   else
+    mkdir "/home/$1/.kube"
     cp -rf "/fuchicorp/admin_config"  "/home/$1/.kube/config"
   fi
 fi
@@ -74,6 +75,7 @@ echo "Copy kube-config to home directory."
 if [ -d  "/home/$1/.kube" ]; then
   cp -rf "/fuchicorp/view_config" "/home/$1/.kube/fuchicorp-config"
 else
+  mkdir "/home/$1/.kube"
   cp -rf "/fuchicorp/view_config"  "/home/$1/.kube/config"
 fi
 
