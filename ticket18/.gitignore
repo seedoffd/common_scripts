@@ -1,0 +1,6 @@
+*test.json*
+*tfvars*
+*.tfstate*
+*.state*
+*.terraform*
+
