@@ -60,7 +60,23 @@ chown -R "$1":"$1" "/home/$1/.ssh"
 if [ "$4" = "--admin" ]; then
   echo "${yellow}Setting Admin privileges.${reset}"
   usermod -aG wheel "$1"
-  sed 's/# %wheel/%wheel/g' -i /etc/sudoers  
+  sed 's/# %wheel/%wheel/g' -i /etc/sudoers
+
+  echo "Copy kube-config to home directory."
+  if [ -d  "/home/$1/.kube" ]; then
+    cp -rf "/fuchicorp/admin_config" "/home/$1/.kube/fuchicorp-config"
+  else
+    mkdir "/home/$1/.kube"
+    cp -rf "/fuchicorp/admin_config"  "/home/$1/.kube/config"
+  fi
+fi
+
+echo "Copy kube-config to home directory."
+if [ -d  "/home/$1/.kube" ]; then
+  cp -rf "/fuchicorp/view_config" "/home/$1/.kube/fuchicorp-config"
+else
+  mkdir "/home/$1/.kube"
+  cp -rf "/fuchicorp/view_config"  "/home/$1/.kube/config"
 fi
 
 echo "${green}Created user (${yellow}$1${green}) for $2.${reset}"
