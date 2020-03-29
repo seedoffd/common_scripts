@@ -35,5 +35,3 @@ if __name__ == '__main__':
         print("Yes this use is in the system")
     else:
         print("This user is not in the list")
-    # print(json.dumps(is_user_member('awd'), indent=2))
-    # check_user_permistion("khuslan")
