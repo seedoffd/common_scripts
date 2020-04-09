@@ -61,6 +61,9 @@ if [ "$4" = "--admin" ]; then
   echo "${yellow}Setting Admin privileges.${reset}"
   usermod -aG wheel "$1"
   sed 's/# %wheel/%wheel/g' -i /etc/sudoers
+else 
+  echo "${red}Removing Admin privileges.${reset}"
+  gpasswd -d wheel "$1"
 
   echo "Copy kube-config to home directory."
   if [ -d  "/home/$1/.kube" ]; then
@@ -70,6 +73,9 @@ if [ "$4" = "--admin" ]; then
     cp -rf "/fuchicorp/admin_config"  "/home/$1/.kube/config"
   fi
 fi
+#else 
+#  echo "${red}Removing Admin privileges.${reset}"
+#  gpasswd -d wheel "$1"
 
 echo "Copy kube-config to home directory."
 if [ -d  "/home/$1/.kube" ]; then
