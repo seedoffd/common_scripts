@@ -71,12 +71,12 @@ if [ "$4" = "--admin" ]; then
   else
     mkdir "/home/$1/.kube"
     cp -rf "/fuchicorp/admin_config"  "/home/$1/.kube/config"
+  fi
+fi
+
 else 
   echo "${red}Removing Admin privileges.${reset}"
   gpasswd -d wheel "$1"
-  
-  fi
-fi
 
 
 echo "Copy kube-config to home directory."
